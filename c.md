@@ -61,3 +61,27 @@ i1_end:
 `void *malloc(size_t size)`和`void *calloc(size_t nmemb, size_t size)`
 malloc()会申请size大小的内存，且内存不会被初始化这片内存。calloc()会申请一片数组为nmemb个size大小的内存数组。同时calloc()会探测出nmemb*size的溢出情况，但malloc()不会。
 
+### ffmpeg中的 *(AVClass **)
+```C
+//ffmpeg中的一个代码
+void func(void *avcl)
+{
+    AVClass *avc = avcl ? *(AVClass **)avcl : NULL;
+}
+//这里传入的avcl是一个 AVCodecContext的结构体指针
+struct AVCodecContext
+{
+    const AVClass *av_class;
+    /*
+    ...
+    */ 
+}
+AVClass *avc = avcl ? (AVCodecContext *)avcl->av_class : NULL;
+AVCodecContext codec_context, *p_codec_context = &codec_context;
+//AVClass *是AVCodecContext的第一个部分，那么有
+AVClass *p_avclass = (AVClass *)(*p_codec_context);
+//什么解引用可以得到(AVClass *)呢？
+//AVClass **
+//因为AVClass *是AVCodecContext的第一个部分，地址是相同的，也就是传进来的void *avcl其实就是&(AVClass *)。所以有了上面的代码。
+```
+
