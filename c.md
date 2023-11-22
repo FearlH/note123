@@ -59,7 +59,7 @@ i1_end:
 
 ### malloc和calloc
 `void *malloc(size_t size)`和`void *calloc(size_t nmemb, size_t size)`
-malloc()会申请size大小的内存，且内存不会被初始化这片内存。calloc()会申请一片数组为nmemb个size大小的内存数组。同时calloc()会探测出nmemb*size的溢出情况，但malloc()不会。
+malloc()会申请size大小的内存，且内存不会被初始化这片内存。calloc()会申请一片数组为nmemb个size大小的内存数组，并且把这一块内存初始化为0。同时calloc()会探测出nmemb*size的溢出情况，但malloc()不会。
 
 ### ffmpeg中的 *(AVClass **)
 ```C
