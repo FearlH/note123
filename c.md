@@ -85,3 +85,6 @@ AVClass *p_avclass = (AVClass *)(*p_codec_context);
 //因为AVClass *是AVCodecContext的第一个部分，地址是相同的，也就是传进来的void *avcl其实就是&(AVClass *)。所以有了上面的代码。
 ```
 
+### 获取文件的信息
+可以使用`fstat(int fd, struct stat *statbuf)`获取文件的大小等信息
+
