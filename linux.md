@@ -12,7 +12,7 @@ wc可以统计文件信息 wc [选项] [文件]
 可以使用file命令查看一个文件的格式
 
 ### 修改内核的启动顺序
-在加载内核动态加载库的时候 modprobe ...发现加载不了，查找之后发现unane -r输出为50的版本里面没有这个库，`uname -r` 输出为79的/lib/module里面有库。
+在加载内核动态加载库的时候 modprobe ...发现加载不了，查找之后发现uname -r输出为50的版本里面没有这个库，`uname -r` 输出为79的/lib/module里面有库。
 切换内核启动版本
 `grep menuentry /boot/grub/grub.cfg` 查看内核的启动顺序 <从0开始>
 
