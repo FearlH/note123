@@ -21,7 +21,7 @@ AVCode会把压缩的数据解压到AVFrame里面，得到未压缩的Frame
 
 ### timestamp
 
-![Alt text](f0e9c481db904b839a96c2bb339d11ab.png)
+![Alt text](ffmpeg_pts_dts.png)
 
 DTS(Decoding Time Stamp, 解码时间戳)，表示压缩帧的解码时间。
 PTS(Presentation Time Stamp, 显示时间戳)，表示将压缩帧解码后得到的原始帧的显示时间。
