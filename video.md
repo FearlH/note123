@@ -19,4 +19,29 @@ Annex B使用start code去区分一块NALu,start code可以是三字节的0x0000
 0x000003->0x00000303
 这些被替换之后的字节被称为emulation pervention bytes（竞争防止字节）。含有竞争防止字节（替换后）的单元称为SODB(String of Data Bits),不含竞争防止字节的单元（替换前）被称为RBSP(Raw Byte Sequence Payload)。
 
-AVCC
+AVCC 使用在每个NALu之前加入一个nal_size的方式去区分流中的NALu，nal_size标识了后面的NALu的长度。这个长度(length)可能可以使用1,2或者4个字节去存储。会有一个extradata/sequence header/AVCDecoderConfigurationRecord去标识length占用的字节的大小。这种情况下的流的组织方式类似于：
+```
+([extradata]) | ([length] NALu) | ([length] NALu) | ...
+```
+AVCDecoderConfigurationRecord的结构
+```CPP
+aligned(8) class AVCDecoderConfigurationRecord { 
+    unsigned int(8) configurationVersion = 1; 
+    unsigned int(8) AVCProfileIndication; 
+    unsigned int(8) profile_compatibility; 
+    unsigned int(8) AVCLevelIndication; 
+    bit(6) reserved = '111111'b; 
+    unsigned int(2) lengthSizeMinusOne; 
+    bit(3) reserved = '111'b; 
+    unsigned int(5) numOfSequenceParameterSets; 
+    for (i=0; i< numOfSequenceParameterSets; i++) { 
+        unsigned int(16) sequenceParameterSetLength;          
+        bit(8*sequenceParameterSetLength) sequenceParameterSetNALUnit; 
+    } 
+    unsigned int(8) numOfPictureParameterSets; 
+    for (i=0; i< numOfPictureParameterSets; i++) { 
+        unsigned int(16) pictureParameterSetLength; 
+        bit(8*pictureParameterSetLength) pictureParameterSetNALUnit; 
+    }
+}
+```
