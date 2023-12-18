@@ -45,3 +45,37 @@ aligned(8) class AVCDecoderConfigurationRecord {
     }
 }
 ```
+
+### digital video introduction
+
+#### aspcet ratio
+aspect ratio(长宽比)，主要有两种长宽的比例，Display Aspcet Ratio(DAR)(显示宽高比 比如视频的16:9等)，Pixel Aspect Ratio(PAR)(像素宽高比，一个像素的宽和高之比)。
+
+#### bit rate
+一秒里面视频的bit数量。bit rate = width * height * bits per pixel * frames per second。同时当比特率接近固定值的时候，被称为constant bit rate(CBR),当有大的变化幅度的时候，被称为variable bit rate（VBR）。比如当视频的一块部分为纯黑色的时候，可能可以减少比特率。同时在过去，有一种称为interlaced video的方式使用隔行扫描，同时隔行传送的方式进行视频的输出。
+
+#### 亮度和色度
+在眼睛中含有很多的视觉细胞，视觉细胞可以分为视杆细胞和视锥细胞。视杆细胞主要区分亮度，视锥细胞（三种分别区对红绿蓝敏感）主要区分色彩。我们的视杆细胞要比视锥细胞多，人们对于亮度的敏感度要高于对色度的敏感度。
+
+#### YCbCr
+Y(brightness)用于代表亮度，Cb(chorma blue),Cr(chrome red)代表两个颜色通道。根据ITU-R的建议，可以按照以下的方法去计算YCbCr。
+```
+Y = 0.299R + 0.587G + 0.114B
+Cb = 0.564(B - Y)
+Cr = 0.713(R - Y)
+```
+转换为RGB
+```
+R = Y + 1.402Cr
+B = Y + 1.772Cb
+G = Y - 0.344Cb - 0.714Cr
+```
+
+#### I帧，B帧和P帧
+I frame(intra frame)self-contained frame. P(predicted) frame can be rendered using the previous frame.(using difference). B(bi-predictive) frame reference the last and feature frames.
+
+#### 视频的压缩
+可以使用的压缩手段有inter prediction和intra prediction。inter prediction主要是移动预测，使用将一个frame分割为很多block，被预测的frame中的block保存移动信息（这个block是从reference的frame的哪个block移动预测得到的）。intra prediction通过对于frame内部进行压缩提取信息使用局部的信息预测周围block的数据得到。在这些预测中往往保存residual来进一步压缩数据。
+
+#### 视频的分割
+视频可以被分割为很多的slice,macro和many sub-partitions。分割为较小的块的部分有利于进行移动的预测，分割成较大的块的部分有利于对背景进行表示。和视频一样，slice也可以被分为I-slice,B-slice,I-macroblock等。
