@@ -18,3 +18,9 @@ ffplay -protocol_whitelist "file,udp,rtp,tcp" -i tcp://172.24.117.211:12345
 ```shell
 ffmpeg -re -i juren.flv -c:v copy -f mpegts udp://172.24.117.211:12345 
 ```
+
+### 限制输出帧的数量
+```shell
+ffmpeg -i video.mp4 -vframes 50 output.mp4
+```
+vframes限制输出50帧
