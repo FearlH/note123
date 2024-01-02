@@ -3,4 +3,4 @@
 
 `gdb executable-file core-file` 调试coredump文件。
 `info sharedlibrary`查看有哪些符号被加载，哪些没有被加载。
-`set solib-search-path`设置寻找符号表的路径，只需要设置到文件夹即可。
+`set solib-search-path`设置寻找符号表的路径，只需要设置到文件夹即可。不同的路径之间使用:隔开。
