@@ -61,3 +61,15 @@ update-alternatives --remove <name> <path>
 ```shell
 update-alternatives --remove gcc /usr/bin/gcc-5
 ```
+
+### ulimit
+`ulimit -c` 设置core文件的最大值，单位blocks
+`ulimit -d` 设置数据段的最大值，单位kbytes
+`ulimit -f` 设置创建文件的最大值，单位blocks
+`ulimit -l` 设置内存中锁定物理内存的最大值，单位kbytes
+`ulimit -m` 设置可以使用的常驻内存的最大值，单位kbytes
+`ulimit -n` 设置进程可以打开的文件描述符的最大值，单位n
+`ulimit -p` 设置管道缓冲区的最大值，单位kbytes
+`ulimit -s` 设置堆栈的最大值，单位kbytes
+`ulimit -t` 设置CPU使用时间的最大上限，单位seconds
+`ulimit -v` 设置虚拟内存的最大值，单位kbytes
