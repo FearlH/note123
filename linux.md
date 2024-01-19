@@ -19,6 +19,7 @@ wc可以统计文件信息 wc [选项] [文件]
 `sudo gedit /etc/default/grub`启动编辑器
 
 修改GRUB_DEFAULT=0为GRUB_DEFAULT="1> <上面看到的版本顺序>"
+其中 1表示启动界面的第几个选项，版本顺序表示选项中的第几号
 保存
 
 之后`sudo update-grub`
