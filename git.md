@@ -10,3 +10,13 @@ PreferredAuthentications publickey
 IdentityFile ~/.ssh/github_id_rsa
 ```
 
+### github切换443端口
+github的22端口可能被屏蔽，可以尝试切换到443端口。按照下面的方法其配置：
+```shell
+Host github.com
+HostName ssh.github.com
+Port 443
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/github_ed25519
+```
+
