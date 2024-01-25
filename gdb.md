@@ -11,3 +11,29 @@
 2.在启动docker或者android emulator的时候进行端口映射。docker下的端口映射 -p host:container,比如-p 1111:1112 或者 -p 31200-31200:31200-31200
 3.在docker中启动lldb-server `lldb-server platform --listen "*:11111" --server --min-gdbserver-port 31200 --max-gdbserver-port 31300`。在命令中设置了 `--listen "*:11111"`表示lldb-server监听端口。在监听之后，可以启动调试的程序。但是在调试的时候，lldb-server会产生一个新的端口和host互动，所以后面需要设置`--min-gdbserver-port 31200 --max-gdbserver-port 31300`，限制新的端口的值，方便docker进行端口的映射。
 4.启动lldb 执行`platform select remote-linux`选择远程平台的类型，`platform connect connect://127.0.0.1:11111`，之后可以执行`file path_to_debug`去设置文件的路径（相对于lldb中显示WorkingDir的位置，默认应该是lldb-server的位置），后面就可以执行了。
+
+### 在vscode里面进行lldb的设置
+可以使用codeLLDB插件进行设置,设置的文件类似于：
+```json
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "lldb launch",
+            "program": "program_to_debug",
+            // "preLaunchTask": "lldb build task",
+            "initCommands": [
+                "platform select remote-linux",
+                "platform connect connect://localhost:11111",
+                "settings set target.inherit-env false",
+                // "platform settings -w /data/local/tmp/",
+                "platform status"
+            ],
+            "sourceMap": {"code/at/build/time/folder" : "code/at/now/folder",
+                          "code/at/build/time/folder/file":"code/at/now/file"}
+        },
+    ]
+}
+```
+sourceMap是编译时期的代码的位置和现在代码位置的映射。
