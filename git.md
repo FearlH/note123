@@ -20,3 +20,6 @@ PreferredAuthentications publickey
 IdentityFile ~/.ssh/github_ed25519
 ```
 
+### 对ssh命令进行debug
+可以使用ssh -v来打印ssh命令的执行过程比如使用`ssh -v -T git@github.com`来对链接进行测试
+
