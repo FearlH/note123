@@ -74,3 +74,14 @@ update-alternatives --remove gcc /usr/bin/gcc-5
 `ulimit -s` 设置堆栈的最大值，单位kbytes。  
 `ulimit -t` 设置CPU使用时间的最大上限，单位seconds。  
 `ulimit -v` 设置虚拟内存的最大值，单位kbytes。  
+
+### top 查看进程和线程
+使用`top -p pid`可以查看继承的信息。之后输入H可以查看进程中的线程信息。
+1.在进程中的S信息可以取值如下：
+D：不可中断休眠（多为阻塞在IO上，较难在top中看到）
+I：空闲
+R：运行中
+S：休眠
+T：被任务控制信号停止
+t：在跟踪期间被调试器停止
+Z：僵尸
