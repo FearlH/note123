@@ -98,3 +98,6 @@ S：Process Status，表示进程状态信息
     T：被任务控制信号停止
     t：在跟踪期间被调试器停止
     Z：僵尸
+
+### 查看和添加自己的组
+可以使用`groups`来查看自己的组，使用`usermod -a -G <group name> <user name>`来为用户添加组，添加之后需要重启才能生效。
