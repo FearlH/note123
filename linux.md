@@ -101,3 +101,6 @@ S：Process Status，表示进程状态信息
 
 ### 查看和添加自己的组
 可以使用`groups`来查看自己的组，使用`usermod -a -G <group name> <user name>`来为用户添加组，添加之后需要重启才能生效。
+
+### 查看进程打开的文件描述符
+`lsof -a -p <pid>`
