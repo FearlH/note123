@@ -104,3 +104,6 @@ S：Process Status，表示进程状态信息
 
 ### 查看进程打开的文件描述符
 `lsof -a -p <pid>`
+
+### 查看pcie的信息
+`cd /sys/bus/pci/devices` 在文件夹下面找到对应的设备，查询各种信息。
