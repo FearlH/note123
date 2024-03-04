@@ -76,7 +76,7 @@ update-alternatives --remove gcc /usr/bin/gcc-5
 `ulimit -v` 设置虚拟内存的最大值，单位kbytes。  
 
 ### top 查看进程和线程
-使用`top -p pid`可以查看继承的信息。之后输入H可以查看进程中的线程信息。
+使用`top -p pid`可以查看进程的信息。之后输入H可以查看进程中的线程信息。
 %CPU： CPU Usage，自上次屏幕更新以来任务占用的CPU时间份额
 %MEM： Memory Usage，进程使用的物理内存百分比
 COMMAND：Command Name or Command Line，用于显示输入的命令行或者程序名称
@@ -107,3 +107,8 @@ S：Process Status，表示进程状态信息
 
 ### 查看pcie的信息
 `cd /sys/bus/pci/devices` 在文件夹下面找到对应的设备，查询各种信息。
+
+### 查看io的速率
+`iostat -c -d -x -t -y <device> <time1> <time2>`
+-c 显示CPU信息 -d 显示设备的利用率信息 -x 显示额外的统计信息 -t 显示时间
+device 设备 time1 每隔几秒显示一次 time2 显示的总时间 -y 如果在给定的时间间隔内显示多条记录则忽略自系统启动以来的第一条信息。
