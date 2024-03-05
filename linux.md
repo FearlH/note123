@@ -112,3 +112,51 @@ S：Process Status，表示进程状态信息
 `iostat -c -d -x -t -y <device> <time1> <time2>`
 -c 显示CPU信息, -d 显示设备的利用率信息, -x 显示额外的统计信息, -t 显示时间, -y 如果在给定的时间间隔内显示多条记录则忽略自系统启动以来的第一条信息。如果不加时间间隔参数那么`iostat`显示的就是从开机以来的IO统计.
 device 设备, time1 每隔几秒显示一次, time2 显示的总时间.
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+
+%user：CPU处在用户模式下的时间百分比。
+%nice：CPU处在带NICE值的用户模式下的时间百分比。
+%system：CPU处在系统模式下的时间百分比。
+%iowait：CPU等待输入输出完成时间的百分比。
+%steal：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比，虚拟机监视程序偷走的时间。
+%idle：CPU空闲时间百分比。
+
+其中的%iowait表示的是CPU因为等待IO而空闲的时间占比。也就是此时的CPU是空闲的时候才会统计进入%iowait。当进程等待IO从而挂起时，如果切换到另外一个进程去执行命令的话，这个时候CPU没有空闲，所以不会统计进入%iowait里面。
+
+后面的输出内容有：
+Device：/dev 目录下的磁盘（或分区）名称
+tps：该设备每秒的传输次数。一次传输即一次 I/O 请求，多个逻辑请求可能会被合并为一次 I/O 请求。一次传输请求的大小是未知的
+kB_read/s：每秒从磁盘读取数据大小，单位KB/s
+kB_wrtn/s：每秒写入磁盘的数据的大小，单位KB/s
+kB_dscd/s: 每秒磁盘的丢块数，单数KB/s
+kB_read：从磁盘读出的数据总数，单位KB
+kB_wrtn：写入磁盘的的数据总数，单位KB
+kB_dscd: 磁盘总的丢块数量
+
+### /usr/bin/time 统计进程的执行信息
+可以使用 `/usr/bin/time <command>` 统计命令的执行情况。使用 `-v`选项可以输出更加详细的信息。
+Command being timed: 执行的命令
+User time (seconds): 在用户模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)
+System time (seconds): 在内核模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)
+Percent of CPU this job got: 这个任务获得的CPU时间百分比
+Elapsed (wall clock) time: 实际过去的时间
+Average shared text size: 平均共享文本区域大小（单位：KB）
+Average unshared data size: 平均非共享数据区域大小（单位：KB）
+Average stack size: 平均栈大小（单位：KB）
+Average total size: 平均总大小（单位：KB）
+Maximum resident set size: 最大常驻集大小，即进程在内存中占用的最大物理内存空间（单位：KB）
+Major (requiring I/O) page faults: 需要进行I/O操作的主要缺页次数
+Minor (reclaiming a frame) page faults: 不需要进行I/O操作的次要缺页次数（比如一块内存交换到swap，但是并没有被污染，可以继续使用原来的页）
+Voluntary context switches: 自愿上下文切换的次数 (主要是CPU时间片到期)
+Involuntary context switches: 非自愿上下文切换的次数 （如等待IO阻塞，交出时间片）
+Swaps: 交换次数
+File system inputs: 文件系统输入操作的数量
+File system outputs: 文件系统输出操作的数量
+Socket messages sent: 发送的套接字消息数量
+Socket messages received: 接收的套接字消息数量
+Signals delivered: 交付的信号数量
+Page size (bytes): 页面大小
+Exit status: 命令退出状态
+
+其中的User time 和 System time统计CPU时间，如果进程有多个线程，那么在一个实际的墙上始终周期内，进程可以执行多个CPU的时钟周期。
