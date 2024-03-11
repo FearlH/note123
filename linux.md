@@ -172,3 +172,15 @@ Page size (bytes): 页面大小
 Exit status: 命令退出状态
 
 其中的User time 和 System time统计CPU时间，如果进程有多个线程，那么在一个实际的墙上始终周期内，进程可以执行多个CPU的时钟周期。
+
+### 使用perf(performance)进行性能检测，以及绘制火焰图
+<https://github.com/brendangregg/FlameGraph> 介绍了绘制火焰图的方法。
+关于perf的使用有需要注意的地方：
+`/proc/sys/kernel/perf_event_paranoid`指定了perf监控的访问权限，默认值为2。
+|值|含义|
+| ------ | -------- |
+| -1 | 允许所有用户使用（几乎）所有事件。在没有CAP_IPC_LOCK的情况下，忽略perf_event_mlock_kb之后的mlock限制 |
+| > = 0 | 没有CAP_SYS_ADMIN的用户不允许ftrace函数跟踪点。禁止没有CAP_SYS_ADMIN的用户进行原始跟踪点访问 |
+| > = 1 | 禁止没有CAP_SYS_ADMIN的用户访问CPU事件 |
+| > = 2	| 禁止没有CAP_SYS_ADMIN的用户进行内核配置  |
+可以通过编辑`/etc/sysctl.conf`在其中设置`kernel.perf_event_paranoid = <setting>`.
