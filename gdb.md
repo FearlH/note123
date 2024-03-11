@@ -44,6 +44,14 @@ sourceMap是编译时期的代码的位置和现在代码位置的映射。
 
 同时也可以使用 `rwatch *<address>`设置读观察点，使用`awatch *<address>`设置读写观察点。这两种观察点也和上面一样可以使用强制转换来观察范围。但是这两种观察点依赖于硬件的支持（x86只有有限个（4个）寄存器用来支持硬件观察点），设置的时候可能会出现一些问题，比如不能观察太大的范围等。
 
+### 使用valgrind结合gdb设置观察点
+由于单独的GDB无法设置较大范围的硬件内存观察点，可以结合valgrind用于模拟CPU去设置硬件观察点。具体的方法是：
+`valgrind --vgdb=yes --vgdb-error=0 <file to be debuged>`
+其中 `--vgdb=yes` 或 `--vgdb=full` 用来确保激活 Valgrind gdbserver 。辅助命令行选项 `--vgdb-error=number` 可用于告诉 gdbserver 仅在显示指定数量的错误后才变为活动状态。因此，值为0将导致 gdbserver 在启动时变为活动状态，这允许在开始运行之前插入断点。
+
+同时，valgrind 将给出连接的提示。
+`gdb <file to be debuged>` 启动gdb。 `(gdb) target remote | vgdb`连接到valgrind上面，同时可以使用-p去指定连接的进程。如果只有一个进程的话则可以不指定。
+
 ### GDB是如如何设置断点以及调试程序的
 GDB主要通过信号以及更改指令来实现程序的调试。在linux上面存在一个系统调用`ptrace()`可以用来跟踪进程的执行。通过这个系统调用GBD可以去访问被调试程序的指令空间，数据空间， 调用栈和寄存器。同时GDB可以接管目标程序的所有事件，这些信息通过信号被发送给GDB。GDB可以`fork()`出一个进程，之后子进程调用`ptrace()`来使得GDB监控自己，之后子进程可以调用`exec()`系列的函数执行待调试的程序。在attach时GDB也是通过调用`ptrace()`来监控进程的执行。
 
