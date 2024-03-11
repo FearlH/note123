@@ -177,10 +177,12 @@ Exit status: 命令退出状态
 <https://github.com/brendangregg/FlameGraph> 介绍了绘制火焰图的方法。
 关于perf的使用有需要注意的地方：
 `/proc/sys/kernel/perf_event_paranoid`指定了perf监控的访问权限，默认值为2。
+
 |值|含义|
 | ------ | -------- |
 | -1 | 允许所有用户使用（几乎）所有事件。在没有CAP_IPC_LOCK的情况下，忽略perf_event_mlock_kb之后的mlock限制 |
 | > = 0 | 没有CAP_SYS_ADMIN的用户不允许ftrace函数跟踪点。禁止没有CAP_SYS_ADMIN的用户进行原始跟踪点访问 |
 | > = 1 | 禁止没有CAP_SYS_ADMIN的用户访问CPU事件 |
 | > = 2	| 禁止没有CAP_SYS_ADMIN的用户进行内核配置  |
+
 可以通过编辑`/etc/sysctl.conf`在其中设置`kernel.perf_event_paranoid = <setting>`.
