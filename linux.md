@@ -76,28 +76,28 @@ update-alternatives --remove gcc /usr/bin/gcc-5
 `ulimit -v` 设置虚拟内存的最大值，单位kbytes。  
 
 ### top 查看进程和线程
-使用`top -p pid`可以查看进程的信息。之后输入H可以查看进程中的线程信息。
-%CPU： CPU Usage，自上次屏幕更新以来任务占用的CPU时间份额
-%MEM： Memory Usage，进程使用的物理内存百分比
-COMMAND：Command Name or Command Line，用于显示输入的命令行或者程序名称
-PID：Process Id，任务独立的ID，即进程ID
-PPID：Parent Process Id，父进程ID
-UID：User Id，任务所有者的用户ID
-USER：User Name，用户名
-RUSER：Real User Name，实际的用户名
-TTY：Controlling Tty，控制终端名称
-TIME：CPU TIME，该任务CPU总共运行的时间
-TIME+：同TIME，其粒度更细
-OOMa：Out of Memory Adjustment Factor，内存溢出调整机制，这个字段会被增加到当前内存溢出分数中，来决定什么任务会被杀掉，范围是-1000到+1000。
-OOMs：Out of Memory Score，内存溢出分数，这个字段是用来选择当内存耗尽时杀掉的任务，范围是0到+1000。0的意思是绝不杀掉，1000的意思是总是杀掉。
-S：Process Status，表示进程状态信息
-    D：不可中断休眠（多为阻塞在IO上，较难在top中看到）
-    I：空闲
-    R：运行中
-    S：休眠
-    T：被任务控制信号停止
-    t：在跟踪期间被调试器停止
-    Z：僵尸
+使用`top -p pid`可以查看进程的信息。之后输入H可以查看进程中的线程信息。   
+%CPU： CPU Usage，自上次屏幕更新以来任务占用的CPU时间份额   
+%MEM： Memory Usage，进程使用的物理内存百分比   
+COMMAND：Command Name or Command Line，用于显示输入的命令行或者程序名称   
+PID：Process Id，任务独立的ID，即进程ID   
+PPID：Parent Process Id，父进程ID   
+UID：User Id，任务所有者的用户ID   
+USER：User Name，用户名   
+RUSER：Real User Name，实际的用户名   
+TTY：Controlling Tty，控制终端名称   
+TIME：CPU TIME，该任务CPU总共运行的时间   
+TIME+：同TIME，其粒度更细   
+OOMa：Out of Memory Adjustment Factor，内存溢出调整机制，这个字段会被增加到当前内存溢出分数中，来决定什么任务会被杀掉，范围是-1000到+1000。   
+OOMs：Out of Memory Score，内存溢出分数，这个字段是用来选择当内存耗尽时杀掉的任务，范围是0到+1000。0的意思是绝不杀掉，1000的意思是总是杀掉。   
+S：Process Status，表示进程状态信息   
+    D：不可中断休眠（多为阻塞在IO上，较难在top中看到）   
+    I：空闲   
+    R：运行中   
+    S：休眠   
+    T：被任务控制信号停止   
+    t：在跟踪期间被调试器停止   
+    Z：僵尸   
 
 ### 查看和添加自己的组
 可以使用`groups`来查看自己的组，使用`usermod -a -G <group name> <user name>`来为用户添加组，添加之后需要重启才能生效。
