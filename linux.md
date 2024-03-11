@@ -147,29 +147,29 @@ kB_dscd: 磁盘总的丢块数量
 具体的信息需要根据man page去查看。
 
 ### /usr/bin/time 统计进程的执行信息
-可以使用 `/usr/bin/time <command>` 统计命令的执行情况。使用 `-v`选项可以输出更加详细的信息。
-Command being timed: 执行的命令
-User time (seconds): 在用户模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)
-System time (seconds): 在内核模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)
-Percent of CPU this job got: 这个任务获得的CPU时间百分比
-Elapsed (wall clock) time: 实际过去的时间
-Average shared text size: 平均共享文本区域大小（单位：KB）
-Average unshared data size: 平均非共享数据区域大小（单位：KB）
-Average stack size: 平均栈大小（单位：KB）
-Average total size: 平均总大小（单位：KB）
-Maximum resident set size: 最大常驻集大小，即进程在内存中占用的最大物理内存空间（单位：KB）
-Major (requiring I/O) page faults: 需要进行I/O操作的主要缺页次数
-Minor (reclaiming a frame) page faults: 不需要进行I/O操作的次要缺页次数（比如一块内存交换到swap，但是并没有被污染，可以继续使用原来的页）
-Voluntary context switches: 自愿上下文切换的次数 (主要是CPU时间片到期)
-Involuntary context switches: 非自愿上下文切换的次数 （如等待IO阻塞，交出时间片）
-Swaps: 交换次数
-File system inputs: 文件系统输入操作的数量
-File system outputs: 文件系统输出操作的数量
-Socket messages sent: 发送的套接字消息数量
-Socket messages received: 接收的套接字消息数量
-Signals delivered: 交付的信号数量
-Page size (bytes): 页面大小
-Exit status: 命令退出状态
+可以使用 `/usr/bin/time <command>` 统计命令的执行情况。使用 `-v`选项可以输出更加详细的信息。   
+Command being timed: 执行的命令   
+User time (seconds): 在用户模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)   
+System time (seconds): 在内核模式中运行所消耗的CPU时间 (只统计CPU时间，sleep/等待在IO上的时间是不计算的)   
+Percent of CPU this job got: 这个任务获得的CPU时间百分比   
+Elapsed (wall clock) time: 实际过去的时间   
+Average shared text size: 平均共享文本区域大小（单位：KB）   
+Average unshared data size: 平均非共享数据区域大小（单位：KB）   
+Average stack size: 平均栈大小（单位：KB）   
+Average total size: 平均总大小（单位：KB）   
+Maximum resident set size: 最大常驻集大小，即进程在内存中占用的最大物理内存空间（单位：KB）   
+Major (requiring I/O) page faults: 需要进行I/O操作的主要缺页次数   
+Minor (reclaiming a frame) page faults: 不需要进行I/O操作的次要缺页次数（比如一块内存交换到swap，但是并没有被污染，可以继续使用原来的页）   
+Voluntary context switches: 自愿上下文切换的次数 (主要是CPU时间片到期)   
+Involuntary context switches: 非自愿上下文切换的次数 （如等待IO阻塞，交出时间片）   
+Swaps: 交换次数   
+File system inputs: 文件系统输入操作的数量   
+File system outputs: 文件系统输出操作的数量   
+Socket messages sent: 发送的套接字消息数量   
+Socket messages received: 接收的套接字消息数量   
+Signals delivered: 交付的信号数量   
+Page size (bytes): 页面大小   
+Exit status: 命令退出状态   
 
 其中的User time 和 System time统计CPU时间，如果进程有多个线程，那么在一个实际的墙上始终周期内，进程可以执行多个CPU的时钟周期。
 
