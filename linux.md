@@ -186,3 +186,28 @@ Exit status: 命令退出状态
 | > = 2	| 禁止没有CAP_SYS_ADMIN的用户进行内核配置  |
 
 可以通过编辑`/etc/sysctl.conf`在其中设置`kernel.perf_event_paranoid = <setting>`.
+
+perf工具中的一些子工具
+`perf-list`: perf-list用来查看perf所支持的性能事件，有软件的也有硬件的。
+`perf record`: 记录一段时间内系统/进程的性能时间参数有
+ -F 采样的频率
+ -e：选择性能事件
+ -p：待分析进程的id
+ -t：待分析线程的id
+ -a：分析整个系统的性能
+ -C：只采集指定CPU数据
+ -c：事件的采样周期
+ -o：指定输出文件，默认为perf.data
+ -A：以append的方式写输出文件
+ -f：以OverWrite的方式写输出文件
+ -g：记录函数间的调用关系
+
+在使用`perf record -e cpu-clock -g -p pid`监控时，发现输出的svg存在unknown函数的时候可以添加`--call-graph dwarf`参数。添加之后的命令为：`sudo perf record -e cpu-clock --call-graph dwarf -p pid`
+
+
+### 火焰图的含义
+y 轴表示调用栈，每一层都是一个函数。调用栈越深，火焰就越高，顶部就是正在执行的函数，下方都是它的父函数。
+
+x 轴表示抽样数，如果一个函数在 x 轴占据的宽度越宽，就表示它被抽到的次数多，即执行的时间长。注意，x 轴不代表时间，而是所有的调用栈合并后，按字母顺序排列的。
+
+火焰图就是看顶层的哪个函数占据的宽度最大。只要有"平顶"（plateaus），就表示该函数可能存在性能问题
