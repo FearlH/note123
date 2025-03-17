@@ -72,10 +72,110 @@ G = Y - 0.344Cb - 0.714Cr
 ```
 
 #### I帧，B帧和P帧
-I frame(intra frame)self-contained frame. P(predicted) frame can be rendered using the previous frame.(using difference). B(bi-predictive) frame reference the last and feature frames.
+I frame(intra frame)self-contained frame. 
+
+P(predicted) frame can be rendered using the previous frame.(using difference). 
+
+B(bi-predictive) frame reference the last and feature frames.
 
 #### 视频的压缩
 可以使用的压缩手段有inter prediction和intra prediction。inter prediction主要是移动预测，使用将一个frame分割为很多block，被预测的frame中的block保存移动信息（这个block是从reference的frame的哪个block移动预测得到的）。intra prediction通过对于frame内部进行压缩提取信息使用局部的信息预测周围block的数据得到。在这些预测中往往保存residual来进一步压缩数据。
 
 #### 视频的分割
 视频可以被分割为很多的slice,macro和many sub-partitions。分割为较小的块的部分有利于进行移动的预测，分割成较大的块的部分有利于对背景进行表示。和视频一样，slice也可以被分为I-slice,B-slice,I-macroblock等。
+
+### 视频编码的各种模式
+
+在理解视频编码的各种模式之前，首先需要了解不同的编码场景。
+
+#### 视频编码的场景
+1.存档:把视频压缩之后保存到储存介质(硬盘，网盘等)。这个时候关心的是在质量足够好的情况同时，码率尽可能低。但是不关心最终的实际视频的大小。
+
+2.流媒体/点播:使用网络储传输一个视频文件，这个时候需要关心的是视频的码率不要超过网络的带宽。同时可能需要在不同的带宽下面提供不同的码率。
+
+3.直播流：和流媒体类似，但是需要尽快（实时）的进行编码。同时直播过程中无法预计后续的视频内容。
+
+4.面向设备的编码：比如把视频保存到DVD或者蓝光的碟片上面，这时可能想使得最终的文件达到特定的大小。
+
+#### 码率的控制模式
+
+##### 固定QP (constant QP, CQP)
+对于复杂和简单的画面都使用固定的量化参数，这样往往会导致根据场景复杂度的不同，比特率的波动很大。除非明确知道自己在做什么，否则不要使用这个模式。
+
+```shell
+ffmpeg -i <input> -c:v libx264 -qp 23 <output>
+ffmpeg -i <input> -c:v libx265 -x265-params qp=23 <output>
+```
+
+好处：用于视频编码的研究
+
+坏处：几乎其他所有的应用
+
+##### 1-pass （只进行一次编码） ABR (average bitrate)
+给编码器设置一个目标码率，编码器计算如何达到这个码率。在1-pass的情况下面，编码器无法得到后续帧的信息，这个时候，编码器只能猜测如何达到设置的码率，这样会导致bitrate的波动以及画质的剧烈变化。（不要使用这个模式）
+
+```shell
+ffmpeg -i <input> -c:v libx264 -b:v 1M <output>
+ffmpeg -i <input> -c:v libx265 -b:v 1M <output>
+ffmpeg -i <input> -c:v libvpx-vp9 -b:v 1M <output>
+```
+
+好处：快速编码
+
+坏处：几乎其他所有的应用
+
+##### 恒定码率 （constant bitrate CBR）
+设置使得编码器在整个流中保持在恒定的码率，这样也许会使得简单的画面浪费部分码率。
+
+```shell
+ffmpeg -i <input> -c:v libx264 -x264-params "nal-hrd=cbr:force-cfr=1" -b:v 1M -minrate 1M -maxrate 1M -bufsize 2M <output>
+```
+
+好处：保持恒定的码率
+
+坏处：文档存储，高效利用带宽的场景会浪费部分码率
+
+##### 2-pass （进行两次编码） ABR (average bitrate)
+如果允许编码器两遍（或更多）编码那么它就可以提前看到未来还没有进行编码的内容（在第一个pass）。编码器可以在第一遍编码是计算编码代价，然后在第二遍编码中更高效的利用比特。这种模式使得在特定码率下输出的质量最好。
+
+```shell
+ffmpeg -i <input> -c:v libx265 -b:v 1M -x265-params pass=1 -f null /dev/null
+ffmpeg -i <input> -c:v libx265 -b:v 1M -x265-params pass=2 <output>.mp4
+```
+
+这种编码是对流进行编码的简单方法，但是有两点需要注意：最终视频的质量是不确定的，可能需要使用多次实验来确保设置的码率足够去编码复杂的内容。第二个需要注意的点是这样可能导致出现局部码率峰值。这可能导致发送的数据bitrate超出了接收端的能力。
+
+好处：达到特定的码率；面向设备的编码
+
+坏处：需要快速编码的情况(比如直播流)
+
+##### 恒定质量 （constant quality, CQ）/ 恒定速率因数 （constant rate factor, CRF）
+主要是可以在整个流中提供恒定的质量。只需要设置这个参数，剩下的就交给编码器去做。
+
+```shell
+ffmpeg -i <input> -c:v libx265 -crf 28 <output>
+```
+
+在x264和x265中，crf值的范围都是[0,51]。对于x264一个比较好的默认值是23。对于x265则是28。在x264下设置crf的值为18（在x265则为24）在视觉上应该是透明的（视觉上感受不到区别），其他的低于这些值的crf设置都有很大的可能浪费文件的尺寸。设置±6的crf会导致最终编码的文件的体积缩小为原来的一半/翻倍。
+
+这个模式唯一的缺点是不能确定最终文件的大小以及码率的波动情况。
+
+和2-pass的ABR相比，在同等的码率下，crf和2-psss ABR应该具有相近似的视频质量。不同点在于，2-pass ABR下，设置的是最终的大小，而crf只是去设置画质参数。
+
+好处：归档，实现最佳的视频质量
+坏处：流式传输，需要设置特定的bitrate或者文件大小的情况
+
+##### 码率受限的编码 (Constrained Encoding,  Video Buffering Verifier VBV)
+
+VBV提供了一个方式去限制码率在一个最大范围之内。VBV可以用在2-pass VBR（每个阶段都可以），CRF中。它可以直接被添加到以及设置好的码控模型里面。
+
+```shell
+ffmpeg -i <input> -c:v libx265 -crf 28 -x265-params vbv-maxrate=1000:vbv-bufsize=2000 <output>
+```
+
+但是对于很小的CRF值，vbv-bufsize可能并不能满足。这时可以去对CRF的值进行调节。
+
+好处：带宽受限的流式传输，直播（和CRF1，1-pass一起使用），流媒体点播 (和target bitrate, 2-pass一起使用)
+
+坏处: 归档
+
